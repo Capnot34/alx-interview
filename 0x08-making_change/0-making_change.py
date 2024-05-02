@@ -17,27 +17,20 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
     
-    # Initialize variables to keep track of total coins used and amount checked
     coins_used = 0
     amount_checked = 0
     
-    # Sort the coins in descending order for greedy approach
     coins.sort(reverse=True)
     
-    # Iterate through each coin denomination
     for coin in coins:
-        # Keep adding coins until the checked amount equals or exceeds the total
         while amount_checked < total:
             amount_checked += coin
             coins_used += 1
-        
-        # If the checked amount matches the total, return the number of coins used
+    
         if amount_checked == total:
             return coins_used
         
-        # Otherwise, backtrack by subtracting the current coin and its count
         amount_checked -= coin
         coins_used -= 1
     
-    # If the loop completes without finding a solution, return -1
     return -1
