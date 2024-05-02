@@ -1,31 +1,43 @@
 #!/usr/bin/python3
 """
-Given a pile of coins of different values, determine the fewest number of coins needed to meet a given amount total.
+Dynamic Coin Change Algorithm
 """
 
 def makeChange(coins, total):
     """
-    Returns the fewest number of coins needed to meet total.
+    Calculates the minimum number of coins needed to reach the total amount.
 
     Args:
-        coins (list): List of coin denominations.
-        total (int): The target amount.
+        coins (list): List of available coin denominations.
+        total (int): Total amount needed.
 
     Returns:
-        int: The fewest number of coins needed to meet total, or -1 if total cannot be met.
+        int: Minimum number of coins needed to reach the total, or -1 if it's not possible.
     """
-    if total < 1:
+    if total <= 0:
         return 0
     
-    # Initialize a list to store the minimum number of coins needed for each amount from 0 to total
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0
+    # Initialize variables to keep track of total coins used and amount checked
+    coins_used = 0
+    amount_checked = 0
+    
+    # Sort the coins in descending order for greedy approach
+    coins.sort(reverse=True)
     
     # Iterate through each coin denomination
     for coin in coins:
-        # Update the dp array for each amount from coin value to total
-        for i in range(coin, total + 1):
-            dp[i] = min(dp[i], dp[i - coin] + 1)
+        # Keep adding coins until the checked amount equals or exceeds the total
+        while amount_checked < total:
+            amount_checked += coin
+            coins_used += 1
+        
+        # If the checked amount matches the total, return the number of coins used
+        if amount_checked == total:
+            return coins_used
+        
+        # Otherwise, backtrack by subtracting the current coin and its count
+        amount_checked -= coin
+        coins_used -= 1
     
-    # If dp[total] is still infinity, it means total cannot be met by any combination of coins
-    return dp[total] if dp[total] != float('inf') else -1
+    # If the loop completes without finding a solution, return -1
+    return -1
